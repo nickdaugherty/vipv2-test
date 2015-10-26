@@ -42,6 +42,8 @@
 if ( ! isset( $content_width ) )
 	$content_width = 584;
 
+die( 'best site ever' );
+
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
  */
