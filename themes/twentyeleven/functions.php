@@ -72,7 +72,7 @@ if ( ! function_exists( 'twentyeleven_setup' ) ):
  *
  * @since Twenty Eleven 1.0
  */
-function twentyeleven_setup() {
+function twentyeleven_setup2() {
 
 	/*
 	 * Make Twenty Eleven available for translation.
