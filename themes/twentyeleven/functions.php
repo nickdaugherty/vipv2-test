@@ -40,10 +40,14 @@
 
 // Set the content width based on the theme's design and stylesheet.
 if ( ! isset( $content_width ) )
-	$content_width = 100;
+	$content_width = 600;
 
 function do_great_things() {
 	echo 'hello, you are great!!!!!';
+}
+
+function do_other_great_things() {
+echo 'hello, you are great!!!!!';
 }
 
 /*
