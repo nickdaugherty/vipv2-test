@@ -42,13 +42,6 @@
 if ( ! isset( $content_width ) )
 	$content_width = 600;
 
-function do_great_things() {
-	echo 'hello, you are great!!!!!';
-}
-
-function do_other_great_things() {
-	echo 'hello, you are great!!!!!';
-}
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
  */
@@ -75,7 +68,7 @@ if ( ! function_exists( 'twentyeleven_setup' ) ):
  *
  * @since Twenty Eleven 1.0
  */
-function twentyeleven_setupTWO() {
+function twentyeleven_setup() {
 
 	/*
 	 * Make Twenty Eleven available for translation.
