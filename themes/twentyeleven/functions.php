@@ -49,9 +49,6 @@ function do_great_things() {
 function do_other_great_things() {
 echo 'hello, you are great!!!!!';
 }
-
-die( 'this is totally the best!!!' );
-
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
  */
