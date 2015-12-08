@@ -40,7 +40,7 @@
 
 // Set the content width based on the theme's design and stylesheet.
 if ( ! isset( $content_width ) )
-	$content_width = 609;
+	$content_width = 610;
 
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
