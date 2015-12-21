@@ -42,6 +42,8 @@
 if ( ! isset( $content_width ) )
 	$content_width = 614;
 
+wpcom_vip_load_plugin( 'fieldmanager' );
+
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
  */
