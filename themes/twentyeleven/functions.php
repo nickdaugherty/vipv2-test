@@ -40,7 +40,7 @@
 
 // Set the content width based on the theme's design and stylesheet.
 if ( ! isset( $content_width ) )
-	$content_width = 614;
+	$content_width = 615;
 
 wpcom_vip_load_plugin( 'fieldmanager' );
 wpcom_vip_load_plugin( 'test-plugin' );
