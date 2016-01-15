@@ -45,6 +45,10 @@ if ( ! isset( $content_width ) )
 wpcom_vip_load_plugin( 'fieldmanager' );
 wpcom_vip_load_plugin( 'test-plugin' );
 
+add_filter( 'jetpack_photon_domain', function( $domain, $image_url ) {
+	return home_url();
+}, 2, 9999 );
+
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
  */
