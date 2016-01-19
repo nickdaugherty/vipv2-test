@@ -45,9 +45,88 @@ if ( ! isset( $content_width ) )
 wpcom_vip_load_plugin( 'fieldmanager' );
 wpcom_vip_load_plugin( 'test-plugin' );
 
-add_filter( 'jetpack_photon_domain', function( $domain, $image_url ) {
-	return home_url();
-}, 2, 9999 );
+class Taxonomy_Suspend_Cache_Invalidation {
+	protected $taxonomies = array(
+		'category'
+	);
+	private $is_suspended = false;
+	public function __construct() {
+		// Disable {$taxonomy}_relationships cache invalidation
+		// when saving categories, as some have a very large number of posts,
+		// which results in N serial wp_cache_delete() calls
+		add_action( 'edited_terms', array( $this, 'edited_terms_action' ), 10, 2 );
+		// Re-enable cache invalidation once the cache clearing code has been bypassed
+		add_action( 'edit_term', array( $this, 'edit_term_action' ), 10, 3 );
+		// Suppress certain fields on taxonomy edit pages
+		add_filter( 'admin_footer', array( $this, 'admin_footer_action' ) );
+	}
+	/**
+	 * Used to suspend cache invalidation, if a term is being edited
+	 */
+	public function edited_terms_action( $term_id, $taxonomy ) {
+		// If we already disabled it, then we don't need to do so again
+		if ( $this->is_suspended ) {
+			return;
+		}
+		if ( ! in_array( $taxonomy, $this->taxonomies ) ) {
+			return;
+		}
+		// Make sure we're in `wp_update_term` - the only place we want this to happen
+		$backtrace = wp_debug_backtrace_summary( null, null, false );
+
+		var_dump( $backtrace );
+		if ( ! in_array( 'wp_update_term', $backtrace ) ) {
+			return;
+		}
+		wp_suspend_cache_invalidation( true );
+		$this->is_suspended = true;
+	}
+	/**
+	 * Restores cache invalidation, after the slow term relationship cache invalidation
+	 * has been skipped
+	 */
+	public function edit_term_action( $term_id, $tt_id, $taxonomy ) {
+		if ( ! in_array( $taxonomy, $this->taxonomies ) ) {
+			return;
+		}
+
+		echo 'done');
+		// `edit_term` is only called from inside `wp_update_term`, so the backtrace
+		// check is not required, though we do check if we had previously suspended
+		// invalidation before disabling it
+		if ( $this->is_suspended ) {
+			wp_suspend_cache_invalidation( false );
+			$this->is_suspended = false;
+		}
+
+		die('all done');
+	}
+	/**
+	 * Suppress the `name` and `slug` fields when editing categories
+	 */
+	public function admin_footer_action() {
+		$screen = get_current_screen();
+		if ( 'edit-tags' === $screen->base && in_array( $screen->taxonomy, $this->taxonomies ) ) {
+			wp_enqueue_script( 'jquery' );
+			add_action( 'admin_print_footer_scripts', function() {
+				// Determine what we're hiding based on which screen is in view
+				// Can't hide the name and slug fields univerally otherwise new categories can't be added.
+				// `get_current_screen()` should return the action, but it isn't; Core ticket to be filed
+				if ( isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) {
+					$selectors = '.form-field.term-name-wrap input, .form-field.term-slug-wrap input';
+				} else {
+					$selectors = '.row-actions span.inline input';
+				}
+				?>
+				<script type="text/javascript">
+					jQuery( '<?php echo esc_js( $selectors ); ?>' ).prop( 'disabled', true );
+				</script>
+				<?php
+			} );
+		}
+	}
+}
+new Taxonomy_Suspend_Cache_Invalidation();
 
 /*
  * Tell WordPress to run twentyeleven_setup() when the 'after_setup_theme' hook is run.
