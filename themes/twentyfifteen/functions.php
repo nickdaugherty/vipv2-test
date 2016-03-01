@@ -31,7 +31,7 @@
  * @since Twenty Fifteen 1.0
  */
 if ( ! isset( $content_width ) ) {
-	$content_width = 702;
+	$content_width = 703;
 
 /**
  * Twenty Fifteen only works in WordPress 4.1 or later.
